@@ -1,0 +1,176 @@
+// touch .bash_profile
+// nano .bash_profile
+// Inside nano type alias subl="/c/Program\ Files/Sublime\ Text\ 3/sublime_text.exe"
+// subl --add filename.html/.js/.c/.c++
+
+1. git config
+	- git config --global user.name "<Your-Full-Name>"
+	- git config --global user.email "<your-email-address>"
+	- git config --global color.ui auto
+	- git config --global merge.conflictstyle diff3
+	- git config --list
+	- git config --global core.editor "'C:/Program Files/Sublime Text 2/sublime_text.exe' -n -w"
+
+2. git init 						// Create new repository
+
+3. git clone 						// Copy existing repo from somewhere else to your local computer. Current directory should not have a git repository. Sets a remote for us called "origin"
+Ex1: git clone https://github.com/udacity/course-git-blog-project (Creates folder with name course-git-blog-project)
+Ex2: git clone https://github.com/udacity/course-git-blog-project AnyFolderName (Creates folder with AnyFolderName)
+
+4. git status 						// Check status of repo. First thing to do in a project repository
+
+5. git log == git log --decorate			// Display info about all existing commits
+	- git log --oneline 				// Display all existing commits within one line
+	- git log --stat				// Display info about what was modified in every commit
+	- git log -p					// Display actual changes to the file
+	Important things, files that were changed, green lines (addition), red lines (deletion) and aqua lines (code number line where the modification was done - for old file, + for commited file)
+	- git log -p --stat
+	- git log -p -w 				// ignores white spaces changes
+	- git log --oneline --graph --all		// --graph adss bullets and lines to the leftmost output, -all displays all branches in the repository
+	- git log -p SHA 				// Display actual change to the file starting at that commit
+6. git show						// Display info about the given commit - provided the SHA
+	- git show 					// Display info about the most recent commit
+	- git show --stat
+	- git show -p
+	- git show -p --stat
+	- git show -p -w
+7. git add 						// add files from working directory to staging index
+	- git add filename
+	- git rm --cached				// unstage files from staging index to working directory
+	- git add file1 file2 directory/file3 ...
+	- git add . (adds the current directory and nested files)
+
+8. git commit 						// take files from staging index and save them in repository
+	- git commit
+	- git commit -m "Initial commit"
+
+9. git diff						// display diff between 2 version of a file, after being saved, but before being committed.
+	- git diff NameofFile
+	
+10. git tag						// add tags to specific commits. Adds a marker. -a stands for annotated flag - should be used always
+	- git tag -a v1.0 				// tags most recent commit
+	- git tag -d v1.0 				// deletes v1.0 tag
+	- git tag -a v1.0 a87985 			// tags specific commit-supplied with SHA number
+	- git tag 					// displays all tags in the repository
+							// use git log to see which commit has the tag
+							// use git tag to see the tags
+
+11. git branch						// allows multiple lines of development
+							// A branch is used to do development or make a fix to the project that won't affect the project (since the changes are made on a branch)
+	- git branch 					// list all branches
+	- git branch newBranch				// creates a branch named newBranch
+	- git branch newBranch 42a69f 			// creates newBranch starting at commit number 42a69f
+	- git branch -d newBranch 			// deletes a branch only if current branch commits exist on other branches.
+	- git branch -D newBranch 			// forces a complete delete
+
+12. git checkout								// switch between different branches and tags and commits
+	- git checkout SHA							// switch to a specific SHA commit
+	- git checkout master = git switch master				// switches to master branch
+	- git checkout "otherbranchname" = git switch "otherbranchname"		// switches to otherbranchname
+	- git checkout -b footer master = git switch -c footer			// Creates a branch named footer and becomes master branch
+
+13. git merge						// Combines changes on different branches. Merges should always occur on the master branch. 
+							// Making a merge creates a commit
+	- git reset --hard HEAD^			// Undo a wrong merge
+	- git merge <name-of-branch-to-merge-in>
+							// 2 types of merge: 1. Fast forward merge (branch's pointer gets updated and moved forward)
+			     	     				     	     2. Regular merge (two divergent branches are combined and a merge commit is created)
+
+14. git commit --amend 					// alter the most recent commit (like forgot to include a file in a commit or have a typo in the commit message)
+							// To include a forgotten file, do: edit the file, save the file, stage the file run git commit --amend.
+
+15. git revert						// changes in that commit are reversed, lines that were added will be deleted. Also it creates a new commit for us.
+	- git revert SHA
+
+16. git reset						// erases commits. Can be used to: move the HEAD and current branch pointer to a referenced commit, erase commits, move commited changed to the staging index, unstage committed changes
+	- git reset HEAD~1 = git reset --mixed HEAD~1 	// moves head && master to the previous commit. Changes made in the last commit are applied to the files in the working directory. (Staging and committing again we'll ge the same content)
+	- git reset --soft HEAD~1			// moves head && master to the previous commit. Moves the last commit to the staging index.
+	- git reset --hard  HEAD~1 			// moves head && master to the previous commit. Moves the last commit to the trash.
+
+							// A backup branch can be created and then it can be merged to the master branch to get the same content as before. 
+
+17. git reflog						// to access erase content from using "git reset" command. Content will be available up to 30 days.
+
+
+Inside .git folder
+- config file 						// All specific configuration, Ex: email address set at the beginning, git config --global user.email "rolandoaguilera90@gmail.com"
+- description						// File used by gitWeb program
+- hooks 						// placement of client-side/server-side scripts that we use to hook into Git's different life cycle events
+- info 							// global excludes file
+- objects 						// store all commits
+- refs 							// holds pointers to commits (branches and tags)
+
+"nothing to commit, working directory clean" 		// Means everything is good to go ahead and check out the project
+	
+git log displays:
+1. SHA
+2. the author
+3. the date
+4. message
+
+Writing good commit messages:
+- keep the message short (<60 characters)
+- explain what the commit does (not how or why)
+- do not use the word "and"
+- explain the why (reason) after a blank space above the commit message.[Do not use git commit -m "...."]
+- every software team have a predetermined way of writing commit messages.
+
+Create .gitignore file and inside write all files to be ignore and not to be committed
+Ex: If I want to ignore 50 .png images on the samples folder. Then I should type inside the .gitignore the following:
+samples/*.jpg
+* - maches 0 or more characters
+? - matches 1 character
+[abc] - matches a, b or c
+** - matches nested directories -a/**/z
+
+Merge Conflicts: Occurs when the exact same line are changed in different branches
+- Git will leave special markers where the programmer need to fix such as: << and >>
+- Use git status to see where is the merge conflict error
+- Fix the error, save the file, add it to the staging index, and commit it, just using git commit (not using git commit -m "AnyMessage")
+
+Relative Commit References
+- ^ 	// indicates the parent commit
+- ~ 	// indicates the first parent commit
+	// main difference between both is when a commit is created from a merge. ^ is to reference the first parent of the commit, ^2 indicates the second parent of the commit
+Example:
+HEAD^ = HEAD~ = HEAD~1
+HEAD^^ = HEAD~2
+HEAD^^^ = HEAD~3
+HEAD^^2 // Refers to second parent of two earlier commits
+HEAD^^^ // Referss to first parent of two earlier commits
+
+GitHub 	// Is a service that lets us set up hosted repositories. We can effectively work in teams in a project.
+	   Developers can access to the central repository (on github) and clone it locally to their own computers.
+	   Now every developer have a local version of the repository and allow them to collaborate.
+	   Once a feature has been added to the code, the code can be pushed up to Github to update the code and merge it with the master branch.
+	   Now other developers can update their local version.
+	   - Repo can public
+	   - Repo can de private (by having a premium account)
+
+// Most common way of sending/receiving data is by specifying a branch.
+
+How to create a repo on GitHub?
+There are 2 ways:
+1. [Share local repository to github]. First create a github account, second create a repo(uncheck repository with README), third add github repo as a remote to local repository.
+- git remote 							// Create and view remotes
+- git remote add origin www.xxxxxxx				// Creates origin as a remote
+- git remote -v							// -v (verbose) displays more information about remotes
+- git push origin master/branchName 				// Pushes master/branchName into origin
+- git push www.xxxxxxxxxxxx/xxxx/xxxx/xx/a branchName		// Pushes branchName into Github(remote)
+
+2. Create online repo -> local computer /
+	- git clone www.xxxx/xxxxx/xxxxx/xxxx/
+	- git push origin master
+
+Collaborating on GitHub
+- git pull origin master/branchName 			   	// will merge master branch from online repo with local master branch.
+- git pull origin master = git fetch origin + git merge master origin/master
+- git fetch origin (updates local copy with the latest data from remote)
+// We would like to preserve the state of the master branch, then we need to create our local branch. 
+// Once we created our local branch and already written code on it, WE DO NOT MERGE IT WITH OUR LOCAL MASTER BRANCH, we just push the branch to the remote repo.
+
+Forking. Definition: Copying someone's else repository into our own Github repository (not on local machine)							
+// Visit someone's else repo and fork it to our github repo (clicking fork command). Then clone it locally and work on it locally. Go to settings->Manage access->Invite a collaborator (type in username)
+Once the work is done we can push it online (to our github repo)
+Once our changes are online we can click on "New pull request", then "Create new pull request" and will pull it onto the original master branch. (not into our online repo, but onto the other person's online repo)
+Then the original owner/creator can review and if satisfied, click on "Merge pull request" 
