@@ -92,6 +92,12 @@ Ex2: git clone https://github.com/udacity/course-git-blog-project AnyFolderName 
 17. git reflog						// to access erase content from using "git reset" command. Content will be available up to 30 days.
 
 
+18. git rebase --interactive HEAD~N             // Merge several commits into one (Usually used to tidy up work). N = number of commits you want to join starting from the most recent one.
+    git rebase -i HEAD~N                        // Same as above
+    git rebase --interactive [commit-hash]		// Same as above, but the commit-hash is the hash of the commit before the first one you want to rewrite from.
+                                                // After above command, the editor will pop up, and change the pick word from pick to s. The first pick is left as it is, and all remaining picks are changed.
+                                                // After that close, the editor and choose the name for the commit.
+
 Inside .git folder
 - config file 						// All specific configuration, Ex: email address set at the beginning, git config --global user.email "rolandoaguilera90@gmail.com"
 - description						// File used by gitWeb program
