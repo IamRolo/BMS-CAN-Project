@@ -14,8 +14,8 @@
 2. git init 						// Create new repository
 
 3. git clone 						// Copy existing repo from somewhere else to your local computer. Current directory should not have a git repository. Sets a remote for us called "origin"
-Ex1: git clone https://github.com/udacity/course-git-blog-project (Creates folder with name course-git-blog-project)
-Ex2: git clone https://github.com/udacity/course-git-blog-project AnyFolderName (Creates folder with AnyFolderName)
+	Ex1: git clone https://github.com/udacity/course-git-blog-project (Creates folder with name course-git-blog-project)
+	Ex2: git clone https://github.com/udacity/course-git-blog-project AnyFolderName (Creates folder with AnyFolderName)
 
 4. git status 						// Check status of repo. First thing to do in a project repository
 
@@ -28,17 +28,21 @@ Ex2: git clone https://github.com/udacity/course-git-blog-project AnyFolderName 
 	- git log -p -w 				// ignores white spaces changes
 	- git log --oneline --graph --all		// --graph adss bullets and lines to the leftmost output, -all displays all branches in the repository
 	- git log -p SHA 				// Display actual change to the file starting at that commit
+
 6. git show						// Display info about the given commit - provided the SHA
 	- git show 					// Display info about the most recent commit
 	- git show --stat
 	- git show -p
 	- git show -p --stat
 	- git show -p -w
+
 7. git add 						// add files from working directory to staging index
 	- git add filename
-	- git rm --cached				// unstage files from staging index to working directory
+	- git rm --cached = git reset fileName   	// unstage files from staging index to working directory
 	- git add file1 file2 directory/file3 ...
 	- git add . (adds the current directory and nested files)
+	- git add --all					// adds all new or modified files
+	- git add -A					// same as above
 
 8. git commit 						// take files from staging index and save them in repository
 	- git commit
@@ -46,6 +50,7 @@ Ex2: git clone https://github.com/udacity/course-git-blog-project AnyFolderName 
 
 9. git diff						// display diff between 2 version of a file, after being saved, but before being committed.
 	- git diff NameofFile
+	- git diff SHA1 SHA2
 	
 10. git tag						// add tags to specific commits. Adds a marker. -a stands for annotated flag - should be used always
 	- git tag -a v1.0 				// tags most recent commit
@@ -62,8 +67,13 @@ Ex2: git clone https://github.com/udacity/course-git-blog-project AnyFolderName 
 	- git branch newBranch 42a69f 			// creates newBranch starting at commit number 42a69f
 	- git branch -d newBranch 			// deletes a branch only if current branch commits exist on other branches.
 	- git branch -D newBranch 			// forces a complete delete
+	- git branch -m oldName newName			// renames a branch
+	- git branch -m newName				// renames current branch
+	- git branch --all
+	- git branch --merged				// shows the branches and which branches have merged with other branches. 
 
 12. git checkout								// switch between different branches and tags and commits
+	- git checkout nameOfFile						// resets our file to the way it was before making any changes. 
 	- git checkout SHA							// switch to a specific SHA commit
 	- git checkout master = git switch master				// switches to master branch
 	- git checkout "otherbranchname" = git switch "otherbranchname"		// switches to otherbranchname
@@ -77,26 +87,46 @@ Ex2: git clone https://github.com/udacity/course-git-blog-project AnyFolderName 
 			     	     				     	     2. Regular merge (two divergent branches are combined and a merge commit is created)
 
 14. git commit --amend 					// alter the most recent commit (like forgot to include a file in a commit or have a typo in the commit message)
-							// To include a forgotten file, do: edit the file, save the file, stage the file run git commit --amend.
+							// SHA is different, hence we modify the git history. Careful when pushing into Github and then pulling. We might create some conflict. 
+							// To include a forgotten file, do: 1. edit the file, 2. save the file, 3. stage the file (git add FileName) 4.run git commit --amend.
+   	- git commit --ammend -m "newCommitMessage"
 
 15. git revert						// changes in that commit are reversed, lines that were added will be deleted. Also it creates a new commit for us.
 	- git revert SHA
 
 16. git reset						// erases commits. Can be used to: move the HEAD and current branch pointer to a referenced commit, erase commits, move commited changed to the staging index, unstage committed changes
+	- git reset 					// removes all file from staging area	
 	- git reset HEAD~1 = git reset --mixed HEAD~1 	// moves head && master to the previous commit. Changes made in the last commit are applied to the files in the working directory. (Staging and committing again we'll ge the same content)
 	- git reset --soft HEAD~1			// moves head && master to the previous commit. Moves the last commit to the staging index.
-	- git reset --hard  HEAD~1 			// moves head && master to the previous commit. Moves the last commit to the trash.
-
+	- git reset --hard  HEAD~1 			// moves head && master to the previous commit. Moves the last commit (TRACKED FILES) to the trash. UNTRACKED FILES are still there. 
+	- git reset --soft/hard/mixed SHA
 							// A backup branch can be created and then it can be merged to the master branch to get the same content as before. 
 
-17. git reflog						// to access erase content from using "git reset" command. Content will be available up to 30 days.
+17. git reflog						// to access erased content from using "git reset" command. Content will be available up to 30 days. Shows all the history of our repository. 
+							// After checking with SHA we want (usually before reset - as we used this command to check the SHA of the commit previous to the reset) we do a [git checkout SHA] and then a [git branch newBranchName] -> to keep those changes.						
 
-
-18. git rebase --interactive HEAD~N             // Merge several commits into one (Usually used to tidy up work). N = number of commits you want to join starting from the most recent one.
-    git rebase -i HEAD~N                        // Same as above
+18. git rebase --interactive HEAD~N			// Merge several commits into one (Usually used to tidy up work). N = number of commits you want to join starting from the most recent one.
+    git rebase -i HEAD~N				// Same as above
     git rebase --interactive [commit-hash]		// Same as above, but the commit-hash is the hash of the commit before the first one you want to rewrite from.
-                                                // After above command, the editor will pop up, and change the pick word from pick to s. The first pick is left as it is, and all remaining picks are changed.
-                                                // After that close, the editor and choose the name for the commit.
+				 			// After above command, the editor will pop up, and change the pick word from pick to s. The first pick is left as it is, and all remaining picks are changed.
+							// After that close, the editor and choose the name for the commit.
+19. git help commandName/git commandName --help    
+
+20. git clean						
+	- git clean -df					// gets rid of untracked directories and untracked files
+
+21. git cheery-pick					// moves a commit from a branch and puts it into other branch. 
+	- git cherry-pick SHA				// SHA (from commit we want to move)
+
+22. git stash						// great when we have changes not ready to commit and we need to switch branches/go back and we dont know what to do with our changes. 
+							// comes handy when we have made changes on a different branch, but we have not commited. Then we can stash those changes, change branches and apply the pop command.
+	- git stash save "AnyName"			// save changes into stash with name "AnyName"
+	- git stash					// save changes into stash with default name	
+	- git stash list				// list all the stashes
+	- git stash apply stash@{}			// brings stash back into current file. But stash is still there. 
+	- git stash pop 				// brings very first stash back into current file. However stash is gone 
+	- git stash drop stash@{}			// deletes the selected stash (stash@{})
+	- git stash clear
 
 Inside .git folder
 - config file 						// All specific configuration, Ex: email address set at the beginning, git config --global user.email "rolandoaguilera90@gmail.com"
@@ -163,20 +193,24 @@ There are 2 ways:
 - git remote -v							// -v (verbose) displays more information about remotes
 - git push origin master/branchName 				// Pushes master/branchName into origin
 - git push www.xxxxxxxxxxxx/xxxx/xxxx/xx/a branchName		// Pushes branchName into Github(remote)
+- git push origin --delete branchName				// deletes branchName on remote repository. 
 
 2. Create online repo -> local computer /
 	- git clone www.xxxx/xxxxx/xxxxx/xxxx/
 	- git push origin master
 
 Collaborating on GitHub
-- git pull origin master/branchName 			   	// will merge master branch from online repo with local master branch.
+- git pull origin master/branchName 			   	// will merge master/branchName branch from online repo with local master branch.
 - git pull origin master = git fetch origin + git merge master origin/master
 - git fetch origin (updates local copy with the latest data from remote)
 // We would like to preserve the state of the master branch, then we need to create our local branch. 
 // Once we created our local branch and already written code on it, WE DO NOT MERGE IT WITH OUR LOCAL MASTER BRANCH, we just push the branch to the remote repo.
+// On github we go to the branch we uploaded and click on "New pull request". We write our comments to inform other developers what we have done. Afterwards we click on "Create pull request". 
+(This a request that I want to merge this branch with the master branch on the remote repository.  
 
 Forking. Definition: Copying someone's else repository into our own Github repository (not on local machine)							
 // Visit someone's else repo and fork it to our github repo (clicking fork command). Then clone it locally and work on it locally. Go to settings->Manage access->Invite a collaborator (type in username)
 Once the work is done we can push it online (to our github repo)
 Once our changes are online we can click on "New pull request", then "Create new pull request" and will pull it onto the original master branch. (not into our online repo, but onto the other person's online repo)
 Then the original owner/creator can review and if satisfied, click on "Merge pull request" 
+
