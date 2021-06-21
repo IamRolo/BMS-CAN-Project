@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Info description="This project contains a specific CAN (Controller Area Network) MBD implementation for s32K144.  The implementation is based on ION's CAN protocol for the BMS ECU. " />
